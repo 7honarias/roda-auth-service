@@ -14,6 +14,10 @@ jobs:
   tests_and_linting:
     name: Pruebas, Linting y Verificación
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: .
     
     env:
       DATABASE_URL: sqlite:///./test.db
@@ -32,16 +36,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt 
-          # O si usas poetry: pip install poetry && poetry install
 
-      - name: Ejecutar Linting (ej. flake8, black)
+      - name: Ejecutar Linting 
         run: |
-          pip install flake8  # Instala la herramienta si no está en requirements.txt
-          flake8 . --max-complexity=10 --exclude=alembic # Ajusta los parámetros según tu configuración
+          pip install flake8  
+          flake8 . --max-complexity=10 --exclude=alembic 
 
       - name: Ejecutar Pruebas (pytest)
         run: |
-          # Asegúrate de que este comando ejecute todas tus pruebas
           pytest --cov=app --cov-report=xml
           
       - name: Subir Reporte de Cobertura de Pruebas (Opcional)
