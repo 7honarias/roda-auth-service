@@ -1,0 +1,44 @@
+# FastAPI y servidor
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Base de datos
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+alembic==1.12.1
+
+# Seguridad y autenticación
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# Validación de datos
+pydantic==2.5.0
+pydantic-settings==2.1.0
+email-validator==2.1.0
+
+# AWS S3
+boto3==1.34.0
+
+# Azure Blob Storage
+azure-storage-blob==12.19.0
+
+# Google Cloud Storage
+google-cloud-storage==2.12.0
+
+# Utilidades
+python-dateutil==2.8.2
+typing-extensions==4.8.0
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2
+
+# Desarrollo
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+bcrypt==3.2.2
+# Logging
+structlog==23.2.0

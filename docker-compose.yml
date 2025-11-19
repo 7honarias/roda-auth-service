@@ -1,0 +1,53 @@
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: roda_db
+    environment:
+      POSTGRES_DB: roda_db
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - roda_network
+
+  auth-service:
+    build: .
+    container_name: roda_auth
+    environment:
+      DATABASE_URL: postgresql://usuario:password@postgres:5432/roda_db
+      SECRET_KEY: dev-secret-key-change-in-production
+      ALGORITHM: "HS256"
+      ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+      REFRESH_TOKEN_EXPIRE_DAYS: "30"
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      GCP_BUCKET_NAME: ${GCP_BUCKET_NAME}
+      APP_NAME: "Roda Vehicle Service"
+      APP_VERSION: "1.0.0"
+      DEBUG: "true"
+      CLOUD_PROVIDER: "gpc"
+      GOOGLE_APPLICATION_CREDENTIALS: /app/gcp-credentials.json
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./logs:/app/logs
+      - ./gcp-credentials.json:/app/gcp-credentials.json
+    networks:
+      - roda_network
+    restart: unless-stopped
+
+
+volumes:
+  postgres_data:
+
+networks:
+  roda_network:
+    driver: bridge
